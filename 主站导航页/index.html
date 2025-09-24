@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>我的手记 | 一场静默的旅程</title>
+    <style>
+        /* 优先调用苹方字体，无网络请求，极致流畅 */
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'CustomSerif', 'Noto Serif SC', 'Lora', 'Georgia', serif;
+            background-color: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        html {
+            font-size: 16px;
+        }
+
+        .serif {
+            font-family: 'CustomSerif', 'Noto Serif SC', Georgia, serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #d4af37;
+        }
+
+        .logo {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #d4af37;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-right {
+                margin-top: 1rem;
+            }
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background-image: url('images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding: 2rem;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            animation: bounce 2s infinite;
+            user-select: none;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
+
+        /* 内容区域 */
+        section {
+            padding: 6rem 0;
+        }
+        .section-title {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+            position: relative;
+            display: block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: #d4af37;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* 关于我 */
+        .about {
+            background-color: #fcfcfc;
+        }
+        .about-content {
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-image {
+            flex: 1;
+            max-width: 350px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #eaeaea;
+        }
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .about-text {
+            flex: 2;
+        }
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        /* 精选文章 */
+        .featured-posts {
+            background-color: #f8f8f8;
+        }
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        .post-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .post-card:hover .post-image img {
+            transform: scale(1.05);
+        }
+        .post-content {
+            padding: 1.5rem;
+        }
+        .post-title {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+        .post-meta {
+            font-size: 0.9rem;
+            color: #888;
+            text-align: right;
+        }
+
+        /* 订阅区 */
+        .subscribe {
+            background-color: #fcfcfc;
+            text-align: center;
+        }
+        .subscribe .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .subscribe .section-title {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            position: relative;
+            display: block;
+            left: 0;
+            transform: none;
+        }
+        .subscribe .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background-color: #d4af37;
+        }
+        .subscribe p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        .subscribe-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .subscribe-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'CustomSerif', serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .subscribe-input:focus {
+            border-color: #d4af37;
+        }
+        .subscribe-input::placeholder {
+            color: #aaa;
+        }
+        .subscribe-button {
+            background: transparent;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-family: 'CustomSerif', serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .subscribe-button:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #1a1a1a;
+            color: #888;
+            text-align: center;
+            padding: 3rem 0 2rem;
+            font-size: 0.9rem;
+        }
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+        .social-links a {
+            color: #888;
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #d4af37;
+        }
+        .copyright {
+            opacity: 0.7;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .subscribe-form {
+                flex-direction: column;
+            }
+            .subscribe-button {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 固定顶部导航 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="nav-link">我的作品</a>
+        </div>
+        <a href="#" class="logo">我的手记</a>
+        <div class="nav-right">
+            <a href="#" class="nav-link">我的收藏</a>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <h1 class="fade-in">一场静默的旅程</h1>
+        <p class="fade-in">关于设计、生活，以及那些未被言说的片刻。</p>
+        <div class="scroll-hint">↓</div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="about">
+        <div class="container">
+            <h2 class="section-title fade-in">关于</h2>
+            <div class="about-content">
+                <div class="about-image fade-in">
+                    <img src="images/avatar.jpg" alt="博主肖像">
+                </div>
+                <div class="about-text fade-in">
+                    <p>我相信「有意图的生活」拥有改变日常的力量。这个空间，是我对美、觉知与永恒之物的探索记录。</p>
+                    <p>通过文字与思考，我希望分享那些能唤醒内心宁静、引导我们更专注地活在此刻的微小启示。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精选文章 -->
+    <section class="featured-posts">
+        <div class="container">
+            <h2 class="section-title fade-in">近期随笔</h2>
+            <div class="posts-grid">
+                <article class="post-card fade-in">
+                    <a href="从站4文章少即是多的艺术/indx.html" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="post-image">
+                            <img src="images/art1.jpg" alt="文章封面">
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">少即是多的艺术</h3>
+                            <p class="post-meta">2025年4月</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="post-card fade-in">
+                    <a href="从站5文章清晨仪式感/index.html" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="post-image">
+                            <img src="images/art2.jpg" alt="文章封面">
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">清晨仪式感</h3>
+                            <p class="post-meta">2025年3月</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="post-card fade-in">
+                    <a href="从站6文章行走即冥想/index.html" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="post-image">
+                            <img src="images/art3.jpg" alt="文章封面">
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">行走即冥想</h3>
+                            <p class="post-meta">2025年2月</p>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- 订阅区 -->
+    <section class="subscribe">
+        <div class="container">
+            <h2 class="section-title fade-in">加入手记</h2>
+            <p class="fade-in">不定期分享一些沉静的思考与生活片段。</p>
+            <form class="subscribe-form fade-in">
+                <input type="email" placeholder="你的邮箱地址" class="subscribe-input" required>
+                <button type="submit" class="subscribe-button">订阅</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <!-- GitHub 链接 -->
+                <a href="https://github.com/yourusername" target="_blank" title="GitHub">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2025 • 我的手记 • 以心意雕琢每一刻</p>
+        </div>
+    </footer>
+
+    <!-- 淡入动画脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => {
+                if (!el.style.opacity) el.style.opacity = 0;
+                if (!el.style.transform) el.style.transform = 'translateY(20px)';
+                observer.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>
