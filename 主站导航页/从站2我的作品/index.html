@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>我的作品 | 我的手记</title>
+    <style>
+        /* 与主页一致的本地字体优先策略 */
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'CustomSerif', 'Noto Serif SC', 'Lora', Georgia, serif;
+            background-color: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        html {
+            font-size: 16px;
+        }
+
+        .serif {
+            font-family: 'CustomSerif', 'Noto Serif SC', Georgia, serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏样式（与主页一致） */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #d4af37;
+        }
+
+        .logo {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #d4af37;
+        }
+
+        /* 作品封面图 */
+        .portfolio-hero {
+            height: 60vh;
+            width: 100%;
+            background-image: url('../images/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-top: 4rem;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+        }
+        .portfolio-meta {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* 作品内容 */
+        .portfolio-content {
+            padding: 5rem 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .portfolio-title {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        .portfolio-lead {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #555;
+            margin: 2rem 0;
+            line-height: 1.7;
+            border-left: 4px solid #d4af37;
+            padding-left: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .portfolio-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .portfolio-content blockquote {
+            margin: 2.5rem 0;
+            padding: 1.5rem 2rem;
+            background: #f0f0f0;
+            border-left: 4px solid #d4af37;
+            font-style: italic;
+            color: #555;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .portfolio-category {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .portfolio-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .portfolio-category h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .portfolio-category h3 svg {
+            width: 24px;
+            height: 24px;
+            color: #d4af37;
+        }
+
+        .portfolio-category p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .portfolio-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            background: #f0f0f0;
+        }
+
+        .portfolio-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .portfolio-item p {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .portfolio-item a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .portfolio-item a:hover {
+            color: #b8860b;
+            text-decoration: underline;
+        }
+
+        /* 返回按钮 */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #888;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #d4af37;
+        }
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* 分隔线 */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ccc, transparent);
+            margin: 4rem 0;
+            opacity: 0.5;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #1a1a1a;
+            color: #888;
+            text-align: center;
+            padding: 3rem 0 2rem;
+            font-size: 0.9rem;
+        }
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+        .social-links a {
+            color: #888;
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #d4af37;
+        }
+        .copyright {
+            opacity: 0.7;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-right {
+                margin-top: 1rem;
+            }
+            .portfolio-hero {
+                margin-top: 3rem;
+                height: 40vh;
+            }
+            .portfolio-title {
+                font-size: 2.2rem;
+            }
+            .portfolio-lead {
+                font-size: 1.15rem;
+            }
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 固定顶部导航 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="./" class="nav-link">我的作品</a>
+        </div>
+        <a href="../index.html" class="logo">我的手记</a>
+        <div class="nav-right">
+            <a href="../index.html" class="nav-link">返回主页</a>
+        </div>
+    </nav>
+
+    <!-- 作品封面 -->
+    <div class="portfolio-hero fade-in">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-meta">
+            <span class="date">创作集 • 视觉表达</span>
+        </div>
+    </div>
+
+    <!-- 作品内容 -->
+    <main class="container">
+        <a href="../index.html" class="back-link fade-in">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            返回主页
+        </a>
+
+        <h1 class="portfolio-title fade-in">我的作品</h1>
+        <p class="portfolio-lead fade-in">
+            在这里展示我的创作历程，包括摄影、设计工具等不同形式的表达。每一件作品都承载着我对美的理解和对生活的感悟。
+        </p>
+
+        <article class="portfolio-content fade-in">
+            <!-- 摄影模块 -->
+            <div class="portfolio-category">
+                <h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    摄影作品
+                </h3>
+                <p>通过镜头捕捉生活中的诗意瞬间，记录那些容易被忽略的美好。</p>
+                
+                <div class="portfolio-item">
+                    <h4>城市光影</h4>
+                    <p>在钢筋水泥的都市中寻找光影的诗意，记录现代城市的独特美感。</p>
+                    <a href="photography/urban-light.html">查看详情</a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h4>自然微距</h4>
+                    <p>探索微观世界的奇妙，展现自然界中微小生命的独特魅力。</p>
+                    <a href="photography/nature-macro.html">查看详情</a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h4>人文纪实</h4>
+                    <p>记录街头巷尾的人间烟火，捕捉真实生活中的情感瞬间。</p>
+                    <a href="photography/humanity.html">查看详情</a>
+                </div>
+            </div>
+
+            <!-- 工具模块 -->
+            <div class="portfolio-category">
+                <h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    设计工具
+                </h3>
+                <p>开发实用的设计工具，帮助提升创作效率和视觉表达。</p>
+                
+                <div class="portfolio-item">
+                    <h4>配色方案生成器</h4>
+                    <p>基于色彩理论的智能配色工具，帮助设计师快速生成和谐的配色方案。</p>
+                    <a href="tools/color-generator.html">立即体验</a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h4>字体搭配助手</h4>
+                    <p>根据设计风格推荐合适的字体组合，提升排版效果。</p>
+                    <a href="tools/font-pairing.html">立即体验</a>
+                </div>
+                
+                <div class="portfolio-item">
+                    <h4>布局模板库</h4>
+                    <p>收集常用的设计布局模板，为各类项目提供灵感和基础框架。</p>
+                    <a href="tools/layout-templates.html">立即体验</a>
+                </div>
+            </div>
+        </article>
+
+        <div class="divider"></div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://github.com/2692555454" target="_blank" title="GitHub">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2025 • 我的手记 • 以心意雕琢每一刻</p>
+        </div>
+    </footer>
+
+    <!-- 淡入动画脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => {
+                if (!el.style.opacity) el.style.opacity = 0;
+                if (!el.style.transform) el.style.transform = 'translateY(20px)';
+                observer.observe(el);
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>布局模板库 | 我的作品</title>
+    <style>
+        /* 与主页一致的本地字体优先策略 */
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CustomSerif';
+            src: local("PingFang SC"), 
+                 local("Noto Serif SC"), 
+                 local("Hiragino Serif GB"), 
+                 local("Songti SC");
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'CustomSerif', 'Noto Serif SC', 'Lora', Georgia, serif;
+            background-color: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        html {
+            font-size: 16px;
+        }
+
+        .serif {
+            font-family: 'CustomSerif', 'Noto Serif SC', Georgia, serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏样式（与主页一致） */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #d4af37;
+        }
+
+        .logo {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #d4af37;
+        }
+
+        /* 作品封面图 */
+        .portfolio-hero {
+            height: 60vh;
+            width: 100%;
+            background-image: url('../../images/layout-templates.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-top: 4rem;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+        }
+        .portfolio-meta {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* 作品内容 */
+        .portfolio-content {
+            padding: 5rem 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .portfolio-title {
+            font-family: 'CustomSerif', 'Noto Serif SC', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        .portfolio-lead {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #555;
+            margin: 2rem 0;
+            line-height: 1.7;
+            border-left: 4px solid #d4af37;
+            padding-left: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .portfolio-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .portfolio-content blockquote {
+            margin: 2.5rem 0;
+            padding: 1.5rem 2rem;
+            background: #f0f0f0;
+            border-left: 4px solid #d4af37;
+            font-style: italic;
+            color: #555;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* 模板展示区 */
+        .template-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .template-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        .template-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .template-preview {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .template-info {
+            padding: 1.5rem;
+        }
+
+        .template-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .template-info p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .template-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            color: #555;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'CustomSerif', serif;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #d4af37;
+            color: white;
+        }
+
+        /* 返回按钮 */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #888;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #d4af37;
+        }
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* 分隔线 */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ccc, transparent);
+            margin: 4rem 0;
+            opacity: 0.5;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #1a1a1a;
+            color: #888;
+            text-align: center;
+            padding: 3rem 0 2rem;
+            font-size: 0.9rem;
+        }
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+        .social-links a {
+            color: #888;
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #d4af37;
+        }
+        .copyright {
+            opacity: 0.7;
+        }
+
+        /* 模板预览区域 */
+        #template-preview-area {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #template-preview-area h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        #template-container {
+            min-height: 300px;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            background: white;
+            margin-top: 1rem;
+        }
+        
+        /* 三栏布局预览 */
+        .three-column-layout {
+            display: flex;
+            gap: 1rem;
+            height: 300px;
+        }
+        
+        .three-column-layout .column {
+            padding: 1rem;
+            border-radius: 5px;
+            background: #e9ecef;
+        }
+        
+        .three-column-layout .sidebar {
+            flex: 1;
+            background: #d0d0d0;
+        }
+        
+        .three-column-layout .main {
+            flex: 2;
+            background: #f8f9fa;
+        }
+        
+        /* 卡片布局预览 */
+        .card-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 网格布局预览 */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .grid-item {
+            background: #e9ecef;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        /* 单栏布局预览 */
+        .single-column-layout .content {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        /* 杂志布局预览 */
+        .magazine-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+        
+        .magazine-layout .main-article {
+            background: #d0d0d0;
+            padding: 2rem;
+            border-radius: 5px;
+            min-height: 150px;
+        }
+        
+        .magazine-layout .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .magazine-layout .sidebar-item {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .magazine-layout .articles {
+            grid-column: span 2;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .magazine-layout .article {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        /* 作品集布局预览 */
+        .portfolio-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .portfolio-layout .portfolio-header {
+            background: #d0d0d0;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .portfolio-layout .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .portfolio-layout .portfolio-item {
+            background: #e9ecef;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        /* 模板项选中状态 */
+        .template-item.selected {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-right {
+                margin-top: 1rem;
+            }
+            .portfolio-hero {
+                margin-top: 3rem;
+                height: 40vh;
+            }
+            .portfolio-title {
+                font-size: 2.2rem;
+            }
+            .portfolio-lead {
+                font-size: 1.15rem;
+            }
+            .container {
+                padding: 0 1.5rem;
+            }
+            .template-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 固定顶部导航 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="../index.html" class="nav-link">我的作品</a>
+        </div>
+        <a href="../../index.html" class="logo">我的手记</a>
+        <div class="nav-right">
+            <a href="../index.html" class="nav-link">返回作品集</a>
+        </div>
+    </nav>
+
+    <!-- 作品封面 -->
+    <div class="portfolio-hero fade-in">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-meta">
+            <span class="date">设计工具 • 布局模板库</span>
+        </div>
+    </div>
+
+    <!-- 作品内容 -->
+    <main class="container">
+        <a href="../index.html" class="back-link fade-in">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            返回作品集
+        </a>
+
+        <h1 class="portfolio-title fade-in">布局模板库</h1>
+        <p class="portfolio-lead fade-in">
+            收集常用的设计布局模板，为各类项目提供灵感和基础框架。通过标准化的布局方案，帮助设计师快速启动项目并保持设计的一致性。
+        </p>
+
+        <article class="portfolio-content fade-in">
+            <p>布局模板库是一个精心策划的设计资源集合，包含了适用于不同场景和需求的布局模板。无论是网页设计、移动应用界面还是平面设计项目，都能在这里找到合适的布局参考。这些模板经过实际项目验证，具有良好的可用性和美观性。</p>
+            
+            <blockquote>
+                "好的布局是设计成功的一半，它为内容提供了清晰的结构和流畅的视觉引导。"
+            </blockquote>
+            
+            <p>在设计过程中，合理的布局不仅能够提升用户体验，还能有效传达信息层次。这个模板库涵盖了从简单到复杂的各种布局方案，每个模板都附带详细的使用说明和调整建议，帮助设计师根据具体需求进行定制化修改。</p>
+            
+            <!-- 模板预览区域 -->
+            <div id="template-preview-area">
+                <h3>模板预览</h3>
+                <p>点击下方任一模板查看实时预览效果</p>
+                <div id="template-container"></div>
+            </div>
+            
+            <div class="template-gallery">
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #D4AF37;"></div>
+                    <div class="template-info">
+                        <h4>经典三栏布局</h4>
+                        <p>适用于内容丰富的网站，主内容区与两个侧边栏的平衡布局。</p>
+                        <div class="template-tags">
+                            <span class="tag">网页设计</span>
+                            <span class="tag">博客</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #1A1A1A;"></div>
+                    <div class="template-info">
+                        <h4>现代卡片布局</h4>
+                        <p>响应式卡片网格设计，适合展示产品或作品集。</p>
+                        <div class="template-tags">
+                            <span class="tag">移动端</span>
+                            <span class="tag">作品集</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #8B4513;"></div>
+                    <div class="template-info">
+                        <h4>杂志风格布局</h4>
+                        <p>模仿杂志排版的多栏布局，适合图文并茂的内容展示。</p>
+                        <div class="template-tags">
+                            <span class="tag">出版物</span>
+                            <span class="tag">新闻</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #556B2F;"></div>
+                    <div class="template-info">
+                        <h4>单页应用布局</h4>
+                        <p>简洁的单页设计，适合展示型网站和登录页面。</p>
+                        <div class="template-tags">
+                            <span class="tag">SPA</span>
+                            <span class="tag">营销页</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #4682B4;"></div>
+                    <div class="template-info">
+                        <h4>仪表盘布局</h4>
+                        <p>信息密集型界面设计，适合后台管理系统。</p>
+                        <div class="template-tags">
+                            <span class="tag">后台</span>
+                            <span class="tag">数据</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <div class="template-preview" style="background-color: #8A2BE2;"></div>
+                    <div class="template-info">
+                        <h4>电商产品页</h4>
+                        <p>专注于产品展示的布局，包含详情、评价和购买流程。</p>
+                        <div class="template-tags">
+                            <span class="tag">电商</span>
+                            <span class="tag">产品</span>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 1rem;">查看详情</a>
+                    </div>
+                </div>
+            </div>
+            
+            <p>这些布局模板不仅提供了视觉参考，更重要的是它们体现了良好的设计原则和用户体验考量。每个模板都可以根据具体项目需求进行调整和扩展，为设计师提供坚实的基础和无限的创作可能。</p>
+        </article>
+
+        <div class="divider"></div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://github.com/2692555454" target="_blank" title="GitHub">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="copyright">&copy; 2025 • 我的手记 • 以心意雕琢每一刻</p>
+        </div>
+    </footer>
+
+    <!-- 淡入动画脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(el => {
+                if (!el.style.opacity) el.style.opacity = 0;
+                if (!el.style.transform) el.style.transform = 'translateY(20px)';
+                observer.observe(el);
+            });
+            
+            // 模板预览功能
+            const templateItems = document.querySelectorAll('.template-item');
+            const templateContainer = document.getElementById('template-container');
+            
+            // 为每个模板项添加点击事件
+            templateItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有选中状态
+                    templateItems.forEach(i => i.classList.remove('selected'));
+                    // 添加当前选中状态
+                    this.classList.add('selected');
+                    
+                    // 获取模板类型
+                    const templateTitle = this.querySelector('h4').textContent;
+                    
+                    // 生成预览内容
+                    let previewContent = '';
+                    
+                    if (templateTitle.includes('三栏')) {
+                        previewContent = `
+                            <div class="three-column-layout">
+                                <div class="column sidebar">左侧边栏<br>导航菜单<br>相关链接</div>
+                                <div class="column main">主要内容区域<br>文章内容<br>图片展示<br>评论区域</div>
+                                <div class="column sidebar">右侧边栏<br>最新文章<br>标签云<br>广告位</div>
+                            </div>
+                        `;
+                    } else if (templateTitle.includes('卡片')) {
+                        previewContent = `
+                            <div class="card-layout">
+                                <div class="card">
+                                    <h4>产品名称</h4>
+                                    <p>产品描述信息</p>
+                                    <button>查看详情</button>
+                                </div>
+                                <div class="card">
+                                    <h4>作品标题</h4>
+                                    <p>作品简介内容</p>
+                                    <button>立即查看</button>
+                                </div>
+                                <div class="card">
+                                    <h4>服务项目</h4>
+                                    <p>服务详细介绍</p>
+                                    <button>了解更多</button>
+                                </div>
+                                <div class="card">
+                                    <h4>新闻资讯</h4>
+                                    <p>最新新闻摘要</p>
+                                    <button>阅读更多</button>
+                                </div>
+                            </div>
+                        `;
+                    } else if (templateTitle.includes('杂志')) {
+                        previewContent = `
+                            <div class="magazine-layout">
+                                <div class="main-article">
+                                    <h2>头条文章标题</h2>
+                                    <p>这是杂志的主打文章内容，通常占据主要版面...</p>
+                                </div>
+                                <div class="sidebar">
+                                    <div class="sidebar-item">
+                                        <h4>热门文章</h4>
+                                        <p>本周最受欢迎的文章列表</p>
+                                    </div>
+                                    <div class="sidebar-item">
+                                        <h4>专题推荐</h4>
+                                        <p>精选专题内容推荐</p>
+                                    </div>
+                                </div>
+                                <div class="articles">
+                                    <div class="article">
+                                        <h4>文章标题一</h4>
+                                        <p>文章摘要内容...</p>
+                                    </div>
+                                    <div class="article">
+                                        <h4>文章标题二</h4>
+                                        <p>文章摘要内容...</p>
+                                    </div>
+                                    <div class="article">
+                                        <h4>文章标题三</h4>
+                                        <p>文章摘要内容...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else if (templateTitle.includes('单页')) {
+                        previewContent = `
+                            <div class="single-column-layout">
+                                <div class="content">
+                                    <h2>单页应用标题</h2>
+                                    <p>这是单页应用的主要内容区域，简洁明了地展示核心信息。</p>
+                                    <button>立即体验</button>
+                                </div>
+                            </div>
+                        `;
+                    } else if (templateTitle.includes('仪表盘')) {
+                        previewContent = `
+                            <div class="grid-layout">
+                                <div class="grid-item">
+                                    <h3>数据统计</h3>
+                                    <p>用户数: 12,345</p>
+                                    <p>订单数: 1,234</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h3>系统状态</h3>
+                                    <p>运行正常</p>
+                                    <p>响应时间: 45ms</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h3>最新消息</h3>
+                                    <p>系统更新通知</p>
+                                    <p>维护计划</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h3>任务列表</h3>
+                                    <p>待处理: 5</p>
+                                    <p>已完成: 23</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h3>用户反馈</h3>
+                                    <p>好评: 95%</p>
+                                    <p>待回复: 3</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h3>快捷操作</h3>
+                                    <p>新增用户</p>
+                                    <p>导出数据</p>
+                                </div>
+                            </div>
+                        `;
+                    } else if (templateTitle.includes('电商')) {
+                        previewContent = `
+                            <div class="portfolio-layout">
+                                <div class="portfolio-header">
+                                    <h2>产品展示</h2>
+                                    <p>精选商品推荐</p>
+                                </div>
+                                <div class="portfolio-grid">
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥299.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥199.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥399.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥259.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥189.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                    <div class="portfolio-item">
+                                        <h4>商品名称</h4>
+                                        <p>￥329.00</p>
+                                        <button>加入购物车</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    // 更新预览区域
+                    templateContainer.innerHTML = previewContent;
+                });
+            });
+            
+            // 默认点击第一个模板
+            if (templateItems.length > 0) {
+                templateItems[0].click();
+            }
+        });
+    </script>
+
+</body>
+</html>
