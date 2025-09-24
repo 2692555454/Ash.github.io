@@ -6,7 +6,6 @@ author: "Ash"
 # 构建设置
 markdown: kramdown
 highlighter: rouge
-theme: null
 
 # 插件
 plugins:
@@ -24,6 +23,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
 
-# 基础URL
-baseurl: "/Ash.github.io"
-url: "https://2692555454.github.io"
+# GitHub Pages设置
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
