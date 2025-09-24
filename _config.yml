@@ -1,0 +1,29 @@
+# GitHub Pages 配置
+title: "Ash的个人网站"
+description: "一场静默的旅程 - 关于设计、生活，以及那些未被言说的片刻"
+author: "Ash"
+
+# 构建设置
+markdown: kramdown
+highlighter: rouge
+theme: null
+
+# 插件
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# 时区和语言
+timezone: Asia/Shanghai
+lang: zh-CN
+
+# 排除文件
+exclude:
+  - README.md
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+
+# 基础URL
+baseurl: "/Ash.github.io"
+url: "https://2692555454.github.io"
