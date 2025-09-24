@@ -83,10 +83,15 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .nav-left, .nav-right {
+        .nav-left, .nav-center, .nav-right {
             display: flex;
             align-items: center;
             gap: 1.5rem;
+        }
+
+        .nav-center {
+            flex: 1;
+            justify-content: center;
         }
 
         .nav-link {
@@ -353,11 +358,12 @@
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-left">
-            <a href="#" class="logo">Ash的个人网站</a>
+            <a href="./主站导航页/从站2我的作品" class="nav-link">我的作品</a>
+        </div>
+        <div class="nav-center">
+            <a href="./主站导航页/从站1我的手记" class="logo">我的手记</a>
         </div>
         <div class="nav-right">
-            <a href="./主站导航页/从站1我的手记" class="nav-link">我的手记</a>
-            <a href="./主站导航页/从站2我的作品" class="nav-link">我的作品</a>
             <a href="./主站导航页/从站3我的收藏" class="nav-link">我的收藏</a>
         </div>
     </nav>
